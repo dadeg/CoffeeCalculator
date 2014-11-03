@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="ngSpApp">
+<head>
+  <title>Coffee Calculator</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />  
+</head>
+<body>
+  <div class="container">
+		<table style="width:100%;margin:10px">
+			<tr>
+				<td style="width: 15%;vertical-align: top;">
+					<div class="list-group" style="margin-top:20px" >
+						<a href="#/" class="list-group-item active">Brew Coffee</a> 
+						<a href="#/about" class="list-group-item">About</a> 
+					</div>
+				</td>
+				<td style="vertical-align: top;padding-left:10px;">
+					<div ng-view></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.js"></script>
+  <script>
+    // 
+    // Defining Module
+    //
+    var spApp = angular.module( "ngSpApp", ['ngRoute'] );
+    //
+    // Defining Routes
+    //
+    spApp.config(function($routeProvider) {
+    	$routeProvider.when('/about', {
+    		controller : 'AboutCtrl',
+    		templateUrl : 'views/about.html'
+    	}).when('/results/:cups', {
+    		controller : 'ResultsCtrl',
+    		templateUrl : 'views/results.html'
+    	}).otherwise({
+    		controller : 'HomeCtrl',
+    		templateUrl: 'views/home.html'
+        });
+    });
+    //
+    // Controller for Home Page
+    //
+    spApp.controller( "HomeCtrl", [ '$scope', '$location', function($scope, $location) {
+		$scope.text = 'How many cups of coffee do you want to make?';
+	  
+		$scope.calculate = function(coffeeData) {
+			$location.path('/results/' + coffeeData.cups);
+		}; 
+	
+    }]);
+    //
+    // Controller for About Page
+    //
+    spApp.controller( "AboutCtrl", [ '$scope', function($scope) {
+	  
+    }]);
+    //
+    // Controller for Results Page
+    //
+    spApp.controller( "ResultsCtrl", [ '$scope', '$routeParams', function($scope, $routeParams) {
+	  $scope.cups = $routeParams.cups;
+	  $scope.water = $routeParams.cups*6;
+	  $scope.beans = $routeParams.cups*2;
+		
+    }]);
+  </script>
+</body>
+</html>
